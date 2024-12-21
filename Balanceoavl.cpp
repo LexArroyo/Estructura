@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
-struct nodo {
 
+struct nodo {
     struct nodo *izq;
     int valor;
     int altura;
@@ -168,29 +168,6 @@ int ubicar(nodo *b, int aguja) {
     return 0;
 }
 
-int buscar(int aguja) {
-    aux = NULL;
-    if (raiz != NULL) {
-        aux = raiz;
-        ubicar(aux, aguja);
-    }
-    return 0;
-}
-
-int buscarvalor() {
-    aux2 = NULL;
-    int dato;
-    cout << "buscar valor: ";
-    cin >> dato;
-    buscar(dato);
-    if (aux2) {
-        cout << "valor encontrado." << endl;
-    } else {
-        cout << "valor no se encontró." << endl;
-    }
-    return 0;
-}
-
 int ubicarPadre(nodo *a) {
     if ((a->izq == aux2) || (a->der == aux2)) {
         padre = a;
@@ -206,18 +183,23 @@ int ubicarPadre(nodo *a) {
 }
 
 int eliminar() {
-    buscarvalor();
-    if (aux2) {
+    int valor;
+    cout << "Ingrese el valor a eliminar: ";
+    cin >> valor;
 
+    aux2 = NULL;
+    ubicar(raiz, valor);
+
+    if (aux2) {
         if (aux2 != raiz) {
             ubicarPadre(raiz);
             if (padre->izq == aux2) {
-                padre->izq = NULL;
+                padre->izq = (aux2->izq) ? aux2->izq : aux2->der;
             } else {
-                padre->der = NULL;
+                padre->der = (aux2->der) ? aux2->der : aux2->izq;
             }
         } else {
-            raiz = NULL;
+            raiz = (aux2->izq) ? aux2->izq : aux2->der;
         }
         free(aux2);
     } else {
@@ -226,17 +208,14 @@ int eliminar() {
     return 0;
 }
 
-
-
 int main(){
 
     int opcion;
     do{
         cout<<"1.Insertar";
         cout<<"\n2.Mostrar";
-        cout<<"\n3.buscar valor";
-        cout<<"\n4.eliminar";
-        cout<<"\n5.Salir";
+        cout<<"\n3.Eliminar";
+        cout<<"\n4.Salir";
         cout<<"\nOpcion: ";
         cin>>opcion;
 
@@ -249,18 +228,14 @@ int main(){
                 mostrar();
             break;
             case 3:
-                buscarvalor();
-            break;
-            case 4:
                 eliminar();
             break;
-            case 5:
+            case 4:
             cout << "Saliendo..." << endl;
             break;
             default:
             cout << "Opción inválida." << endl;
         }
 
-     } while(opcion!=3);
-
+     } while(opcion!=4);
 }
